@@ -1,7 +1,5 @@
 <?php
 require_once('connMysql.php');
-//沒有用到cart的話下面這行可以刪掉
-require_once('class.Cart.php');
 //
 session_start();
 //檢查是否經過登入
@@ -17,20 +15,21 @@ if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
 }
 //
 
-if(isset($_GET['oid'])&&($_GET['oid']!='')){
+if (isset($_GET['oid']) && ($_GET['oid'] != '')) {
     $query_RecProduct = "SELECT * FROM `order` WHERE orderid=?";
     $stmt = $db_link->prepare($query_RecProduct);
-    $stmt->bind_param("i", $_GET['pid']);
+    $stmt->bind_param("i", $_GET['oid']);
     $stmt->execute();
-    $RecProduct = $stmt->get_result();
-    $row_RecProduct = $RecProduct->fetch_assoc();
+    $RecOrder = $stmt->get_result();
 }
-//這個cart不要用，要替換成這筆訂單的東西(你上面獲取的)，下面的cart變數也要換，只是我不會弄
-$cart = new Cart([
-    'cartMaxItem' => 0,
-    'itemMaxQuantity' => 0,
-    'useCookie' => false,
-]);
+
+if (isset($_GET['oid']) && ($_GET['oid'] != '')) {
+    $query_RecProduct = "SELECT * FROM `orderdetail` WHERE orderid=?";
+    $stmt = $db_link->prepare($query_RecProduct);
+    $stmt->bind_param("i", $_GET['oid']);
+    $stmt->execute();
+    $RecOrderdetail = $stmt->get_result();
+}
 ?>
 
 <!DOCTYPE html>
@@ -40,7 +39,7 @@ $cart = new Cart([
     <meta charset="utf-8">
     <title>PHP行動購物網</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
+    <link href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css"/>
     <style type="text/css">
         .message {
             font-weight: bolder;
@@ -135,74 +134,87 @@ $cart = new Cart([
                 <th width="20%">數量</th>
                 <th width="30%">小計</th>
             </tr>
-            <?php
-            $i = 0;
-            $allItems = $cart->getItems();
-            foreach ($allItems as $items) {
-                foreach ($items as $item) {
-                    $i++;
-                    ?>
-                    <tr class="last">
-                        <td align="center"><?php echo $i; ?>.</td>
-                        <td><?php echo $item['attributes']['pname']; ?></td>
-                        <td align="center"><?php echo $item['quantity']; ?></td>
-                        <td align="right">$ <?php echo number_format($item['attributes']['price'] * $item['quantity']); ?></td>
-                    </tr>
-                <?php }
+            <?php $i = 1;
+            $total = 0;
+            while ($row_RecOrderdetail = $RecOrderdetail->fetch_assoc()) {
+                $subTotal = $row_RecOrderdetail['unitprice'] * $row_RecOrderdetail['quantity'];
+                $total += $subTotal; ?>
+                <tr class="last">
+                    <td align="center"><?php echo $i; ?>.</td>
+                    <td><?php echo $row_RecOrderdetail['productname']; ?></td>
+                    <td align="center"><?php echo $row_RecOrderdetail['quantity']; ?></td>
+                    <td align="right">
+                        $ <?php echo number_format($row_RecOrderdetail['unitprice'] * $row_RecOrderdetail['quantity']); ?></td>
+                </tr>
+                <?php $i++;
             } ?>
+
             <tr>
                 <td align="center">總計</td>
                 <td>&nbsp;</td>
                 <td align="right">&nbsp;</td>
-                <td align="right">$ <?php echo number_format($cart->getAttributeTotal('price')); ?></td>
+                <td align="right">$ <?php echo number_format($total); ?></td>
             </tr>
         </table>
+        <?php $row_RecOrder = $RecOrder->fetch_assoc() ?>
         <form action="cartreport.php" method="post" name="cartform" id="cartform">
             <h2>聯絡資料</h2>
             <table width="100%" cellpadding="2" cellspacing="0" class="datatable">
                 <tr>
                     <th width="30%">姓名<font color="#FF0000">*</font>
                     </th>
-                    <td bgcolor="#F6F6F6"><input type="text" name="customername" id="customername"></td>
+                    <td bgcolor="#F6F6F6"><input type="text" name="customername" id="customername"
+                                                 value="<?php echo $row_RecOrder['customername']; ?>"></td>
                 </tr>
                 <tr>
                     <th width="20%">電子郵件<font color="#FF0000">*</font>
                     </th>
-                    <td bgcolor="#F6F6F6"><input type="text" name="customeremail" id="customeremail"></td>
+                    <td bgcolor="#F6F6F6"><input type="text" name="customeremail" id="customeremail"
+                                                 value="<?php echo $row_RecOrder['customeremail']; ?>"></td>
                 </tr>
                 <tr>
                     <th width="20%">電話<font color="#FF0000">*</font>
                     </th>
-                    <td bgcolor="#F6F6F6"><input type="text" name="customerphone" id="customerphone"></td>
+                    <td bgcolor="#F6F6F6"><input type="text" name="customerphone" id="customerphone"
+                                                 value="<?php echo $row_RecOrder['customerphone']; ?>"></td>
                 </tr>
                 <tr>
                     <th width="20%">住址<font color="#FF0000">*</font>
                     </th>
-                    <td bgcolor="#F6F6F6"><input name="customeraddress" type="text" id="customeraddress"></td>
+                    <td bgcolor="#F6F6F6"><input name="customeraddress" type="text" id="customeraddress"
+                                                 value="<?php echo $row_RecOrder['customeraddress']; ?>"></td>
                 </tr>
                 <tr>
                     <th>付款方式<font color="#FF0000">*</font>
                     </th>
-                    <td><select name="paytype" id="paytype">
-                            <option value="ATM匯款" selected>ATM匯款</option>
-                            <option value="線上刷卡">線上刷卡</option>
-                            <option value="貨到付款">貨到付款</option>
-                        </select></td>
+                    <td>
+                        <select name="paytype" id="paytype">
+                            <option value="ATM匯款"<?php if ($row_RecOrder['paytype'] == 'ATM匯款') echo ' selected'; ?>>
+                                ATM匯款
+                            </option>
+                            <option value="線上刷卡"<?php if ($row_RecOrder['paytype'] == '線上刷卡') echo ' selected'; ?>>
+                                線上刷卡
+                            </option>
+                            <option value="貨到付款"<?php if ($row_RecOrder['paytype'] == '貨到付款') echo ' selected'; ?>>
+                                貨到付款
+                            </option>
+                        </select>
+                    </td>
                 </tr>
             </table>
             <input name="cartaction" type="hidden" id="cartaction" value="update">
         </form>
         <div data-role="controlgroup" data-type="horizontal" style="text-align:center">
             <a href="search.php" data-role="button" data-icon="back" data-rel="back">取消修改</a>
-            <a href="search.php" data-role="button" data-icon="check" class="modify_btn">確認修改</a>
+            <a href="search.php" data-role="button" data-icon="check" class="modify_btn" data-orderid="<?php echo $row_RecOrder['orderid']; ?>">確認修改</a>
         </div>
     </div>
     <div data-role="footer" data-position="fixed">
         <div data-role="navbar">
             <ul>
                 <li><a href="index.php" data-icon="grid">逛逛商店</a></li>
-                <li><a href="cart.php" data-icon="star" class="ui-btn-active" data-ajax="false">檢視購物車</a></li>
-                <li><a href="search.php" data-icon="search" data-ajax="false">訂單查詢</a></li>
+                <li><a href="cart.php" data-icon="star" data-ajax="false">檢視購物車</a></li>
+                <li><a href="search.php" data-icon="search" class="ui-btn-active" data-ajax="false">訂單查詢</a></li>
                 <li><a href="?logout=true" data-icon="" data-ajax="false">登出</a></li>
             </ul>
         </div>
@@ -212,8 +224,39 @@ $cart = new Cart([
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
     // 修改訂單
-    $('.edit_btn').click(function() {
+    $('.modify_btn').click(function () {
         // 在這修改
+        let orderID = $(this).data('orderid');
+        let customerName = $('#customername').val();
+        let customerEmail = $('#customeremail').val();
+        let customerPhone = $('#customerphone').val();
+        let customerAddress = $('#customeraddress').val();
+        let payType = $('#paytype').val();
+        let confirmCancel = window.confirm('您確定要消改此訂單嗎？');
+        if (confirmCancel) {
+            $.ajax({
+                type: 'POST',
+                url: 'edit_order.php', // PHP file to handle cancellation logic
+                data: {
+                    orderID: orderID,
+                    customername: customerName,
+                    customeremail: customerEmail,
+                    customerphone: customerPhone,
+                    customeraddress: customerAddress,
+                    paytype: payType
+                },
+                success: function(response) {
+                    // Handle success response here
+                    window.alert("修改成功");
+                    // location.reload();
+                },
+                error: function(xhr, status, error) {
+                    // Handle error response here
+                    console.error(xhr.responseText);
+                    window.alert("修改失敗");
+                }
+            });
+        }
     });
 </script>
 
