@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- 主機： 127.0.0.1:3306
--- 產生時間： 2022-12-26 15:31:25
--- 伺服器版本： 8.0.29
--- PHP 版本： 8.1.6
+-- 主機： 127.0.0.1
+-- 產生時間： 2024-01-07 16:08:30
+-- 伺服器版本： 10.4.28-MariaDB
+-- PHP 版本： 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,10 +28,10 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `category` (
-  `categoryid` int UNSIGNED NOT NULL,
-  `categoryname` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8_unicode_ci NOT NULL,
-  `categorysort` int UNSIGNED DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
+  `categoryid` int(10) UNSIGNED NOT NULL,
+  `categoryname` varchar(100) NOT NULL,
+  `categorysort` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- 傾印資料表的資料 `category`
@@ -46,18 +46,47 @@ INSERT INTO `category` (`categoryid`, `categoryname`, `categorysort`) VALUES
 -- --------------------------------------------------------
 
 --
+-- 資料表結構 `memberdata`
+--
+
+CREATE TABLE `memberdata` (
+  `m_id` int(10) UNSIGNED NOT NULL,
+  `m_username` varchar(20) NOT NULL,
+  `m_passwd` varchar(100) NOT NULL,
+  `m_level` enum('admin','member') NOT NULL DEFAULT 'member'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- 傾印資料表的資料 `memberdata`
+--
+
+INSERT INTO `memberdata` (`m_id`, `m_username`, `m_passwd`, `m_level`) VALUES
+(1, '123', '$2y$10$ajXHDRPHDlW9amFlq.pHeOLZarIcEQlopmaKIih6LJgKdhWJOEYL6', 'member');
+
+-- --------------------------------------------------------
+
+--
 -- 資料表結構 `order`
 --
 
 CREATE TABLE `order` (
-  `orderid` int UNSIGNED NOT NULL,
-  `total` int UNSIGNED DEFAULT NULL,
-  `customername` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `customeremail` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `customeraddress` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `customerphone` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `paytype` enum('ATM匯款','線上刷卡','貨到付款') CHARACTER SET utf8mb3 COLLATE utf8_unicode_ci DEFAULT 'ATM匯款'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
+  `orderid` int(10) UNSIGNED NOT NULL,
+  `total` int(10) UNSIGNED DEFAULT NULL,
+  `customername` varchar(100) DEFAULT NULL,
+  `customeremail` varchar(100) DEFAULT NULL,
+  `customeraddress` varchar(100) DEFAULT NULL,
+  `customerphone` varchar(100) DEFAULT NULL,
+  `paytype` enum('ATM匯款','線上刷卡','貨到付款') DEFAULT 'ATM匯款'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- 傾印資料表的資料 `order`
+--
+
+INSERT INTO `order` (`orderid`, `total`, `customername`, `customeremail`, `customeraddress`, `customerphone`, `paytype`) VALUES
+(5, 24390, '123', '456@gmail.com', '123', '789', 'ATM匯款'),
+(6, 41700, '123', '01057042@email.ntou.edu.tw', '789', '456', 'ATM匯款'),
+(7, 24390, '123', '456@gmail.com', '789', '456', 'ATM匯款');
 
 -- --------------------------------------------------------
 
@@ -66,13 +95,22 @@ CREATE TABLE `order` (
 --
 
 CREATE TABLE `orderdetail` (
-  `orderdetailid` int UNSIGNED NOT NULL,
-  `orderid` int UNSIGNED DEFAULT NULL,
-  `productid` int UNSIGNED DEFAULT NULL,
-  `productname` varchar(254) CHARACTER SET utf8mb3 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `unitprice` int UNSIGNED DEFAULT NULL,
-  `quantity` int UNSIGNED DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
+  `orderdetailid` int(10) UNSIGNED NOT NULL,
+  `orderid` int(10) UNSIGNED DEFAULT NULL,
+  `productid` int(10) UNSIGNED DEFAULT NULL,
+  `productname` varchar(254) DEFAULT NULL,
+  `unitprice` int(10) UNSIGNED DEFAULT NULL,
+  `quantity` int(10) UNSIGNED DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- 傾印資料表的資料 `orderdetail`
+--
+
+INSERT INTO `orderdetail` (`orderdetailid`, `orderid`, `productid`, `productname`, `unitprice`, `quantity`) VALUES
+(9, 5, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
+(10, 6, 10, 'MacBook Air M2 8核心', 41700, 1),
+(11, 7, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1);
 
 -- --------------------------------------------------------
 
@@ -81,13 +119,13 @@ CREATE TABLE `orderdetail` (
 --
 
 CREATE TABLE `product` (
-  `productid` int UNSIGNED NOT NULL,
-  `categoryid` int UNSIGNED NOT NULL,
-  `productname` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `productprice` int UNSIGNED DEFAULT NULL,
-  `productimages` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` text CHARACTER SET utf8mb3 COLLATE utf8_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_unicode_ci;
+  `productid` int(10) UNSIGNED NOT NULL,
+  `categoryid` int(10) UNSIGNED NOT NULL,
+  `productname` varchar(100) DEFAULT NULL,
+  `productprice` int(10) UNSIGNED DEFAULT NULL,
+  `productimages` varchar(100) DEFAULT NULL,
+  `description` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- 傾印資料表的資料 `product`
@@ -121,6 +159,12 @@ ALTER TABLE `category`
   ADD PRIMARY KEY (`categoryid`);
 
 --
+-- 資料表索引 `memberdata`
+--
+ALTER TABLE `memberdata`
+  ADD PRIMARY KEY (`m_id`);
+
+--
 -- 資料表索引 `order`
 --
 ALTER TABLE `order`
@@ -146,25 +190,31 @@ ALTER TABLE `product`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `category`
 --
 ALTER TABLE `category`
-  MODIFY `categoryid` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `categoryid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `memberdata`
+--
+ALTER TABLE `memberdata`
+  MODIFY `m_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `order`
 --
 ALTER TABLE `order`
-  MODIFY `orderid` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `orderid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  MODIFY `orderdetailid` int UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `orderdetailid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `product`
 --
 ALTER TABLE `product`
-  MODIFY `productid` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `productid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
