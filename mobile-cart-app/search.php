@@ -68,6 +68,49 @@ if($_SESSION["memberLevel"] == "admin"){
         .datatable tr.last {
             border-bottom: none;
         }
+
+        @media (max-width: 600px) {
+            tr {
+                width: 40%;
+                padding: 5px;
+                display: inline-flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .datatable-row .cancel,
+            .datatable-row .edit {
+                font-size: 12px;
+            }
+            .vertical-align-top {
+                vertical-align: top;
+            }
+
+            .vertical-align-middle {
+                vertical-align: middle;
+            }
+
+            .vertical-align-bottom {
+                vertical-align: bottom;
+            }
+            
+            .button-container {
+                white-space: nowrap;
+            }
+
+            .my-button {
+                margin: 0;
+                display: inline-block;
+                padding: 5px 5px; 
+                width: 100px; 
+                height: 40px; 
+                font-size: 16px; 
+            }
+            .op{
+                height:40px;
+                line-height:40px;
+            }
+        }
     </style>
 </head>
 
@@ -77,18 +120,18 @@ if($_SESSION["memberLevel"] == "admin"){
     </div>
     <main>
         <table width="100%" border="0" cellpadding="2" cellspacing="0" class="datatable">
-            <tr>
-                <th>編號</th>
-                <th>小計</th>
-                <th>訂購人姓名</th>
-                <th>信箱</th>
-                <th>住址</th>
-                <th>電話</th>
-                <th>付款方式</th>
-                <th>操作</th>
-            </tr>
             <?php while ($row_RecOrder = $RecOrder->fetch_assoc()) { ?>
-                <tr>
+                <tr class="vertical-align-top" >
+                    <th>編號</th>
+                    <th>小計</th>
+                    <th>訂購人姓名</th>
+                    <th>信箱</th>
+                    <th>住址</th>
+                    <th>電話</th>
+                    <th>付款方式</th>
+                    <th class="op">操作</th>
+                </tr>
+                <tr class="vertical-align-middle">
                     <td align="center"><?php echo $row_RecOrder['orderid']; ?></td>
                     <td align="center"><?php echo $row_RecOrder['total']; ?></td>
                     <td align="center"><?php echo $row_RecOrder['customername']; ?></td>
@@ -96,7 +139,7 @@ if($_SESSION["memberLevel"] == "admin"){
                     <td align="center"><?php echo $row_RecOrder['customeraddress']; ?></td>
                     <td align="center"><?php echo $row_RecOrder['customerphone']; ?></td>
                     <td align="center"><?php echo $row_RecOrder['paytype']; ?></td>
-                    <td><button type="button" class="cancel" data-orderid="<?php echo $row_RecOrder['orderid']; ?>">取消</button><button type="button" class="edit" data-orderid="<?php echo $row_RecOrder['orderid']; ?>">修改</button></td>
+                    <td class="button-container"><button type="button" class="cancel my-button" data-orderid="<?php echo $row_RecOrder['orderid']; ?>">取消</button><button type="button" class="edit my-button" data-orderid="<?php echo $row_RecOrder['orderid']; ?>">修改</button></td>
                 </tr>
             <?php } ?>
         </table>
