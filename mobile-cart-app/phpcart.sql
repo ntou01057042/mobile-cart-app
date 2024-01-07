@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-01-07 16:08:30
+-- 產生時間： 2024-01-07 18:27:55
 -- 伺服器版本： 10.4.28-MariaDB
 -- PHP 版本： 8.2.4
 
@@ -61,7 +61,9 @@ CREATE TABLE `memberdata` (
 --
 
 INSERT INTO `memberdata` (`m_id`, `m_username`, `m_passwd`, `m_level`) VALUES
-(1, '123', '$2y$10$ajXHDRPHDlW9amFlq.pHeOLZarIcEQlopmaKIih6LJgKdhWJOEYL6', 'member');
+(1, '123', '$2y$10$ajXHDRPHDlW9amFlq.pHeOLZarIcEQlopmaKIih6LJgKdhWJOEYL6', 'member'),
+(2, 'sss', '$2y$10$ht3XNgNMhQrf.MUYPS5G.eweBRlY6u92g1FyKZgyEjbnrNk0m4Kl6', 'admin'),
+(3, 'vvv', '$2y$10$qJd7Fsf3wFi3ZXcDgiVZNeaY.PXpzW4KNiE.NieCqvhKOVb8zn4iG', 'member');
 
 -- --------------------------------------------------------
 
@@ -71,6 +73,7 @@ INSERT INTO `memberdata` (`m_id`, `m_username`, `m_passwd`, `m_level`) VALUES
 
 CREATE TABLE `order` (
   `orderid` int(10) UNSIGNED NOT NULL,
+  `m_id` int(11) UNSIGNED NOT NULL,
   `total` int(10) UNSIGNED DEFAULT NULL,
   `customername` varchar(100) DEFAULT NULL,
   `customeremail` varchar(100) DEFAULT NULL,
@@ -83,10 +86,10 @@ CREATE TABLE `order` (
 -- 傾印資料表的資料 `order`
 --
 
-INSERT INTO `order` (`orderid`, `total`, `customername`, `customeremail`, `customeraddress`, `customerphone`, `paytype`) VALUES
-(5, 24390, '123', '456@gmail.com', '123', '789', 'ATM匯款'),
-(6, 41700, '123', '01057042@email.ntou.edu.tw', '789', '456', 'ATM匯款'),
-(7, 24390, '123', '456@gmail.com', '789', '456', 'ATM匯款');
+INSERT INTO `order` (`orderid`, `m_id`, `total`, `customername`, `customeremail`, `customeraddress`, `customerphone`, `paytype`) VALUES
+(13, 2, 50290, 'aaa', 'aaa@aaa.com', 'aaa', 'aaa', 'ATM匯款'),
+(14, 3, 50290, 'as', 'asd@a.com', 'aaa', 'aaa', '貨到付款'),
+(15, 2, 24390, 'aaa', 'aaa@aaa.com', 'aaa', 'aaa', 'ATM匯款');
 
 -- --------------------------------------------------------
 
@@ -110,7 +113,16 @@ CREATE TABLE `orderdetail` (
 INSERT INTO `orderdetail` (`orderdetailid`, `orderid`, `productid`, `productname`, `unitprice`, `quantity`) VALUES
 (9, 5, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
 (10, 6, 10, 'MacBook Air M2 8核心', 41700, 1),
-(11, 7, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1);
+(11, 7, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
+(12, 8, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
+(13, 8, 14, 'APPLE Watch Ultra', 25900, 1),
+(14, 12, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
+(15, 12, 14, 'APPLE Watch Ultra', 25900, 1),
+(16, 13, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
+(17, 13, 14, 'APPLE Watch Ultra', 25900, 1),
+(18, 14, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
+(19, 14, 14, 'APPLE Watch Ultra', 25900, 1),
+(20, 15, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1);
 
 -- --------------------------------------------------------
 
@@ -168,7 +180,8 @@ ALTER TABLE `memberdata`
 -- 資料表索引 `order`
 --
 ALTER TABLE `order`
-  ADD PRIMARY KEY (`orderid`);
+  ADD PRIMARY KEY (`orderid`),
+  ADD KEY `mid` (`m_id`);
 
 --
 -- 資料表索引 `orderdetail`
@@ -196,25 +209,35 @@ ALTER TABLE `category`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `memberdata`
 --
 ALTER TABLE `memberdata`
-  MODIFY `m_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `m_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `order`
 --
 ALTER TABLE `order`
-  MODIFY `orderid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `orderid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  MODIFY `orderdetailid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `orderdetailid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `product`
 --
 ALTER TABLE `product`
   MODIFY `productid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- 已傾印資料表的限制式
+--
+
+--
+-- 資料表的限制式 `order`
+--
+ALTER TABLE `order`
+  ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`m_id`) REFERENCES `memberdata` (`m_id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
