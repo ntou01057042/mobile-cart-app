@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： 127.0.0.1
--- 產生時間： 2024-01-07 18:27:55
+-- 產生時間： 2024-01-07 20:06:41
 -- 伺服器版本： 10.4.28-MariaDB
 -- PHP 版本： 8.2.4
 
@@ -87,9 +87,8 @@ CREATE TABLE `order` (
 --
 
 INSERT INTO `order` (`orderid`, `m_id`, `total`, `customername`, `customeremail`, `customeraddress`, `customerphone`, `paytype`) VALUES
-(13, 2, 50290, 'aaa', 'aaa@aaa.com', 'aaa', 'aaa', 'ATM匯款'),
-(14, 3, 50290, 'as', 'asd@a.com', 'aaa', 'aaa', '貨到付款'),
-(15, 2, 24390, 'aaa', 'aaa@aaa.com', 'aaa', 'aaa', 'ATM匯款');
+(16, 2, 24390, 'aaav', 'aaa@aaa.com', 'aaa', 'aaa', '線上刷卡'),
+(19, 2, 66090, 'aaa', 'aaa@aaa.com', 'aaa', 'aaa', 'ATM匯款');
 
 -- --------------------------------------------------------
 
@@ -111,18 +110,9 @@ CREATE TABLE `orderdetail` (
 --
 
 INSERT INTO `orderdetail` (`orderdetailid`, `orderid`, `productid`, `productname`, `unitprice`, `quantity`) VALUES
-(9, 5, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
-(10, 6, 10, 'MacBook Air M2 8核心', 41700, 1),
-(11, 7, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
-(12, 8, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
-(13, 8, 14, 'APPLE Watch Ultra', 25900, 1),
-(14, 12, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
-(15, 12, 14, 'APPLE Watch Ultra', 25900, 1),
-(16, 13, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
-(17, 13, 14, 'APPLE Watch Ultra', 25900, 1),
-(18, 14, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
-(19, 14, 14, 'APPLE Watch Ultra', 25900, 1),
-(20, 15, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1);
+(21, 16, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
+(25, 19, 6, 'iPad Air 10.9 Wi-Fi', 24390, 1),
+(26, 19, 10, 'MacBook Air M2 8核心', 41700, 1);
 
 -- --------------------------------------------------------
 
@@ -187,7 +177,8 @@ ALTER TABLE `order`
 -- 資料表索引 `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  ADD PRIMARY KEY (`orderdetailid`);
+  ADD PRIMARY KEY (`orderdetailid`),
+  ADD KEY `orderid` (`orderid`);
 
 --
 -- 資料表索引 `product`
@@ -215,13 +206,13 @@ ALTER TABLE `memberdata`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `order`
 --
 ALTER TABLE `order`
-  MODIFY `orderid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `orderid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  MODIFY `orderdetailid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `orderdetailid` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- 使用資料表自動遞增(AUTO_INCREMENT) `product`
@@ -238,6 +229,12 @@ ALTER TABLE `product`
 --
 ALTER TABLE `order`
   ADD CONSTRAINT `order_ibfk_1` FOREIGN KEY (`m_id`) REFERENCES `memberdata` (`m_id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- 資料表的限制式 `orderdetail`
+--
+ALTER TABLE `orderdetail`
+  ADD CONSTRAINT `orderdetail_ibfk_1` FOREIGN KEY (`orderid`) REFERENCES `order` (`orderid`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
