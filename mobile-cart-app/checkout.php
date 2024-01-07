@@ -197,6 +197,39 @@ $cart = new Cart([
       </div>
     </div>
   </div>
+<<<<<<< HEAD
+  <div data-role="footer" data-position="fixed">
+    <div data-role="navbar">
+      <ul>
+        <li><a href="index.php" data-icon="grid">逛逛商店</a></li>
+        <li><a href="cart.php" data-icon="star" class="ui-btn-active" data-ajax="false">檢視購物車</a></li>
+          <li><a href="search.php" data-icon="search" data-ajax="false">訂單查詢</a></li>
+      </ul>
+    </div>
+  </div>
+    <div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+        <div data-role="header" data-theme="a">
+        <h1>關於我們</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <h3 class="ui-title">行動購物網</h3>
+            <p>期待能提供最新的產品，最優惠的價格，讓顧客能夠盡情的享受線上購物的樂趣，歡迎多多光臨！</p>        
+            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">關閉</a>
+        </div>
+    </div>     
+    <div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
+        <div data-role="header" data-theme="a">
+        <h1>關於我們</h1>
+        </div>
+        <div role="main" class="ui-content">
+            <h3 class="ui-title">行動購物網</h3>
+            <p>期待能提供最新的產品，最優惠的價格，讓顧客能夠盡情的享受線上購物的樂趣，歡迎多多光臨！</p>        
+            <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">關閉</a>
+        </div>
+    </div>           
+</div>
+=======
+>>>>>>> main
 </body>
 
 </html>

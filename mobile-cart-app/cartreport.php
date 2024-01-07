@@ -10,9 +10,9 @@
             'useCookie'=>false,
         ]);
         //新增訂單資料
-        $sql_query = "INSERT INTO `order`(`total`, `customername`, `customeremail`, `customeraddress`, `customerphone`, `paytype`) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql_query = "INSERT INTO `order`(`m_id`, `total`, `customername`, `customeremail`, `customeraddress`, `customerphone`, `paytype`) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $db_link->prepare($sql_query);
-        $stmt->bind_param("isssss", $cart->getAttributeTotal('price'), $_POST["customername"], $_POST["customeremail"], $_POST["customeraddress"], $_POST["customerphone"], $_POST["paytype"]);
+        $stmt->bind_param("iisssss", $_SESSION["userId"] ,$cart->getAttributeTotal('price'), $_POST["customername"], $_POST["customeremail"], $_POST["customeraddress"], $_POST["customerphone"], $_POST["paytype"]);
         $stmt->execute();
         //取得新增的訂單編號
         $o_pid = $stmt->insert_id;

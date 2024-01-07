@@ -1,6 +1,5 @@
 <?php
 require_once('connMysql.php');
-//
 session_start();
 //檢查是否經過登入
 if (!isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"] == "")) {
@@ -14,10 +13,19 @@ if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
     header("Location: index.php");
 }
 //
-$query_RecOrder = "SELECT * FROM `order` ORDER BY `order`.`orderid` ASC";
-$stmt = $db_link->prepare($query_RecOrder);
-$stmt->execute();
-$RecOrder = $stmt->get_result();
+if($_SESSION["memberLevel"] == "admin"){
+    $query_RecOrder = "SELECT * FROM `order` ORDER BY `order`.`orderid` ASC";
+    $stmt = $db_link->prepare($query_RecOrder);
+    $stmt->execute();
+    $RecOrder = $stmt->get_result();
+}else{
+    $query_RecOrder = "SELECT * FROM `order` WHERE m_id = '{$_SESSION["userId"]}' ORDER BY `order`.`orderid` ASC";
+    $stmt = $db_link->prepare($query_RecOrder);
+    $stmt->execute();
+    $RecOrder = $stmt->get_result();
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="zh-TW">
