@@ -10,6 +10,10 @@ require_once('connMysql.php');
 <head>
     <meta charset="utf-8">
     <title>訂單查詢</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css"/>
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
     <style>
         body {
             font-family: sans-serif;
@@ -42,10 +46,6 @@ require_once('connMysql.php');
             border-bottom: none;
         }
     </style>
-    <link href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css"/>
-    <script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
-    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
-
 </head>
 <body>
 <div data-position="fixed" data-role="header" data-position="fixed">
