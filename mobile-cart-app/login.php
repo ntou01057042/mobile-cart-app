@@ -1,9 +1,57 @@
+<?php
+require_once("connMysql.php");
+session_start();
+// if (isset($_SESSION["loginMember"]) && ($_SESSION["loginMember"] != "")) {
+//     echo "<script>";
+//     echo "window.location.href = 'index.php';";
+//     echo "</script>";
+// }
+//執行會員登入
+if (isset($_POST["username"]) && isset($_POST["passwd"])) {
+    echo "<script>";
+    echo "window.location.href = 'register.php';";
+    echo "</script>";
+    //繫結登入會員資料
+    $query_RecLogin = "SELECT m_id, m_username, m_passwd, m_level FROM memberdata WHERE m_username=?";
+    $stmt = $db_link->prepare($query_RecLogin);
+    $stmt->bind_param("s", $_POST["username"]);
+    $stmt->execute();
+    //取出帳號密碼的值綁定結果
+    $stmt->bind_result($userid, $username, $passwd, $level);
+    $stmt->fetch();
+    $stmt->close();
+    //比對密碼，若登入成功則呈現登入狀態
+    if (password_verify($_POST["passwd"], $passwd)) {
+        //設定登入者的名稱及等級
+        $_SESSION["userId"] = $userid;
+        $_SESSION["loginMember"] = $username;
+        $_SESSION["memberLevel"] = $level;
+        //使用Cookie記錄登入資料
+        if (isset($_POST["rememberme"]) && ($_POST["rememberme"] == "true")) {
+            setcookie("remUser", $_POST["username"], time() + 365 * 24 * 60);
+            setcookie("remPass", $_POST["passwd"], time() + 365 * 24 * 60);
+        } else {
+            if (isset($_COOKIE["remUser"])) {
+                setcookie("remUser", $_POST["username"], time() - 100);
+                setcookie("remPass", $_POST["passwd"], time() - 100);
+            }
+        }
+        header("Location: index.php");
+    } else {
+        // TODO
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>登入頁面</title>
+    <link href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -42,7 +90,7 @@
             box-sizing: border-box;
         }
 
-        button {
+        #button {
             background-color: #38c;
             color: white;
             padding: 10px 15px;
@@ -51,7 +99,7 @@
             cursor: pointer;
         }
 
-        button:hover {
+        #button:hover {
             background-color: #38f;
         }
 
@@ -70,44 +118,32 @@
         }
     </style>
 </head>
+
 <body>
 
-<?php
-session_start();
+    <div class="container">
+        <h2>行動購物網登入系統</h2>
+        <form name="form1" method="post" action="">
+            <label for="username">Username:</label>
+            <!-- <input type="text" id="username" name="username" required> -->
+            <input name="username" type="text" class="logintextbox" id="username" value="<?php if (isset($_COOKIE["remUser"]) && ($_COOKIE["remUser"] != "")) echo $_COOKIE["remUser"]; ?>" required>
+            <br>
+            <label for="passwd">Password:</label>
+            <!-- <input type="password" id="password" name="password" required> -->
+            <input name="passwd" type="password" class="logintextbox" id="passwd" value="<?php if (isset($_COOKIE["remPass"]) && ($_COOKIE["remPass"] != "")) echo $_COOKIE["remPass"]; ?>" required>
+            <br>
+            <p>
+                <input name="rememberme" type="checkbox" id="rememberme" value="true">
+                記住我的帳號密碼
+            </p>
+            <br>
+            <!-- <button type="submit">Login</button> -->
+            <input type="submit" name="button" id="button" value="Login">
+        </form>
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // 處理登入表單提交
-    $username = $_POST["username"];
-    $password = $_POST["password"];
-
-    // 在真實應用中，這裡需要從資料庫中檢查使用者名稱和密碼
-
-    // 這裡只是一個簡單的比對，實際應用中應該使用加密存儲和比對密碼
-    if ($username === "example" && $password === "password") {
-        $_SESSION["username"] = $username;
-        header("Location: dashboard.php"); // 登入成功，重定向到用戶的控制台或主頁
-        exit();
-    } else {
-        echo '<script>alert("密碼錯誤");</script>';
-        // echo "<p style='color: #d9534f;'>Invalid username or password. <a href='#'>Try again</a></p>";
-    }
-}
-?>
-
-<div class="container">
-    <h2>行動購物網登入系統</h2>
-    <form id="myForm" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-        <br>
-        <button type="submit">Login</button>
-    </form>
-
-    <p>還沒有帳號? <a href="register.php">註冊</a></p>
-</div>
+        <p>還沒有帳號? <a href="register.php">註冊</a></p>
+    </div>
 
 </body>
+
 </html>

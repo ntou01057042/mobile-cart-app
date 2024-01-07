@@ -1,5 +1,19 @@
 <?php
 require_once("connMysql.php");
+//
+session_start();
+//檢查是否經過登入
+if (!isset($_SESSION["loginMember"]) || ($_SESSION["loginMember"] == "")) {
+    header("Location: login.php");
+}
+//執行登出動作
+if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
+    unset($_SESSION["userId"]);
+    unset($_SESSION["loginMember"]);
+    unset($_SESSION["memberLevel"]);
+    header("Location: index.php");
+}
+//
 $query_RecCategory = "SELECT `category`.`categoryid`, `category`.`categoryname`, `category`.`categorysort`, COUNT(`product`.`productid`) as `productNum` FROM `category` LEFT JOIN `product` ON `category`.`categoryid` = `product`.`categoryid` GROUP BY `category`.`categoryid`, `category`.`categoryname`, `category`.`categorysort` ORDER BY `category`.`categorysort` ASC";
 $Rec_Category = $db_link->query($query_RecCategory);
 ?>
@@ -34,18 +48,9 @@ $Rec_Category = $db_link->query($query_RecCategory);
                 <ul>
                     <li><a href="index.php" data-icon="grid" class="ui-btn-active">逛逛商店</a></li>
                     <li><a href="cart.php" data-icon="star" data-ajax="false">檢視購物車</a></li>
-                    <li><a href="search.php" data-icon="gear" data-ajax="false">訂單查詢</a></li>
+                    <li><a href="search.php" data-icon="search" data-ajax="false">訂單查詢</a></li>
+                    <li><a href="?logout=true" data-icon="gear" data-ajax="false">登出</a></li>
                 </ul>
-            </div>
-        </div>
-        <div data-role="popup" id="popupDialog" data-overlay-theme="b" data-theme="b" data-dismissible="false" style="max-width:400px;">
-            <div data-role="header" data-theme="a">
-                <h1>關於我們</h1>
-            </div>
-            <div role="main" class="ui-content">
-                <h3 class="ui-title">行動購物網</h3>
-                <p>期待能提供最新的產品，最優惠的價格，讓顧客能夠盡情的享受線上購物的樂趣，歡迎多多光臨！</p>
-                <a href="#" class="ui-btn ui-corner-all ui-shadow ui-btn-inline ui-btn-b" data-rel="back" data-transition="flow">關閉</a>
             </div>
         </div>
     </div>
