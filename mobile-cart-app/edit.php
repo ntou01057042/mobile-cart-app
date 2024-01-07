@@ -123,7 +123,7 @@ if (isset($_GET['oid']) && ($_GET['oid'] != '')) {
 <body>
 <div data-role="page" id="page" data-add-back-btn="true">
     <div data-role="header" data-position="fixed">
-        <h1><span class="subjectDiv">購物結帳</span></h1>
+        <h1><span class="subjectDiv">更改訂單</span></h1>
     </div>
     <div data-role="content">
         <h2>購物內容 </h2>
