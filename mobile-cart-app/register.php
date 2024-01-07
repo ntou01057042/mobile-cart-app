@@ -26,7 +26,7 @@ if (isset($_POST["action"]) && ($_POST["action"] == "join")) {
     if ($RecFindUser->num_rows > 0) {
         header("Location: member_join.php?errMsg=1&username={$_POST["m_username"]}");
     } else {
-        //若沒有執行新增的動作	
+        //若沒有執行新增的動作
         $query_insert = "INSERT INTO memberdata (m_username, m_passwd) VALUES (?, ?)";
         $stmt = $db_link->prepare($query_insert);
         $stmt->bind_param(
@@ -49,6 +49,9 @@ if (isset($_POST["action"]) && ($_POST["action"] == "join")) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>註冊頁面</title>
+    <link href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css" />
+    <script src="http://code.jquery.com/jquery-1.11.1.min.js" type="text/javascript"></script>
+    <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js" type="text/javascript"></script>
     <style>
         /* Include the same styling as the login page for consistency */
         body {
@@ -122,34 +125,7 @@ if (isset($_POST["action"]) && ($_POST["action"] == "join")) {
                 document.formJoin.m_username.focus();
                 return false;
             } else {
-                // uid = document.formJoin.m_username.value;
-                // if (uid.length < 5 || uid.length > 12) {
-                //     alert("您的帳號長度只能5至12個字元!");
-                //     document.formJoin.m_username.focus();
-                //     return false;
-                // }
-                // if (!(uid.charAt(0) >= 'a' && uid.charAt(0) <= 'z')) {
-                //     alert("您的帳號第一字元只能為小寫字母!");
-                //     document.formJoin.m_username.focus();
-                //     return false;
-                // }
-                // for (idx = 0; idx < uid.length; idx++) {
-                //     if (uid.charAt(idx) >= 'A' && uid.charAt(idx) <= 'Z') {
-                //         alert("帳號不可以含有大寫字元!");
-                //         document.formJoin.m_username.focus();
-                //         return false;
-                //     }
-                //     if (!((uid.charAt(idx) >= 'a' && uid.charAt(idx) <= 'z') || (uid.charAt(idx) >= '0' && uid.charAt(idx) <= '9') || (uid.charAt(idx) == '_'))) {
-                //         alert("您的帳號只能是數字,英文字母及「_」等符號,其他的符號都不能使用!");
-                //         document.formJoin.m_username.focus();
-                //         return false;
-                //     }
-                //     if (uid.charAt(idx) == '_' && uid.charAt(idx - 1) == '_') {
-                //         alert("「_」符號不可相連 !\n");
-                //         document.formJoin.m_username.focus();
-                //         return false;
-                //     }
-                // }
+                ;
             }
             if (document.formJoin.m_passwd.value != document.formJoin.m_passwdrecheck.value) {
                 alert("密碼二次輸入不一樣,請重新輸入!\n");
@@ -173,19 +149,15 @@ if (isset($_POST["action"]) && ($_POST["action"] == "join")) {
         <h2>行動購物網註冊系統</h2>
         <form action="" method="POST" name="formJoin" id="formJoin" onSubmit="return checkForm();">
             <label for="m_username">Username:</label>
-            <!-- <input type="text" id="reg_username" name="reg_username" required> -->
-            <input name="m_username" type="text" class="normalinput" id="m_username">
+            <input name="m_username" type="text" class="normalinput" id="m_username" required>
             <br>
             <label for="m_passwd">Password:</label>
-            <!-- <input type="password" id="reg_password" name="reg_password" required> -->
-            <input name="m_passwd" type="password" class="normalinput" id="m_passwd">
+            <input name="m_passwd" type="password" class="normalinput" id="m_passwd" required>
             <br>
             <label for="m_passwdrecheck">Confirm Password:</label>
-            <!-- <input type="password" id="confirm_password" name="confirm_password" required> -->
-            <input name="m_passwdrecheck" type="password" class="normalinput" id="m_passwdrecheck">
+            <input name="m_passwdrecheck" type="password" class="normalinput" id="m_passwdrecheck" required>
             <br>
             <input name="action" type="hidden" id="action" value="join">
-            <!-- <button type="submit">Register</button> -->
             <input type="submit" value="Register" id="register">
         </form>
 
