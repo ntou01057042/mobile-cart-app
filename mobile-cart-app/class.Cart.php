@@ -1,18 +1,5 @@
 <?php
 
-/**
- * Cart: A very simple PHP cart library.
- *
- * Copyright (c) 2017 Sei Kan
- *
- * Distributed under the terms of the MIT License.
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright  2017 Sei Kan <seikan.dev@gmail.com>
- * @license    http://www.opensource.org/licenses/mit-license.php The MIT License
- *
- * @see       https://github.com/seikan/Cart
- */
 class Cart
 {
 	/**
@@ -199,13 +186,12 @@ class Cart
 	 */
 	public function getItem($id, $hash = null)
 	{
-		if($hash){
+		if ($hash) {
 			$key = array_search($hash, array_column($this->items[$id], 'hash'));
-			if($key !== false)
+			if ($key !== false)
 				return $this->items[$id][$key];
 			return false;
-		}
-		else
+		} else
 			return reset($this->items[$id]);
 	}
 
