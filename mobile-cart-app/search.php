@@ -72,7 +72,7 @@ require_once('connMysql.php');
                 <td align="center"><?php echo $row_RecOrder['customeraddress'];?></td>
                 <td align="center"><?php echo $row_RecOrder['customerphone'];?></td>
                 <td align="center"><?php echo $row_RecOrder['paytype'];?></td>
-                <td><button type="button" class="cancel">取消</button><button type="button" class="edit">修改</button></td>
+                <td><button type="button" class="cancel" data-orderid="<?php echo $row_RecOrder['orderid']; ?>">取消</button><button type="button" class="edit" data-orderid="<?php echo $row_RecOrder['orderid']; ?>">修改</button></td>
             </tr>
         <?php }?>
     </table>
@@ -82,7 +82,7 @@ require_once('connMysql.php');
         <ul>
             <li><a href="index.php" data-icon="grid">逛逛商店</a></li>
             <li><a href="cart.php" data-icon="star" data-ajax="false">檢視購物車</a></li>
-            <li><a href="search.php" data-icon="gear" data-ajax="false" class="ui-btn-active">訂單查詢</a></li>
+            <li><a href="search.php" data-icon="search" data-ajax="false">訂單查詢</a></li>
         </ul>
     </div>
 </div>
@@ -102,18 +102,31 @@ require_once('connMysql.php');
     $(function () {
         // 取消訂單
         $('.cancel').click(function () {
-            // 提示確認
-            let confirm = window.confirm('您確定要取消此訂單嗎？');
-            if (confirm) {
-                // 發送取消訂單請求
-                // ...
+            let orderID = $(this).data('orderid');
+            let confirmCancel = window.confirm('您確定要取消此訂單嗎？');
+            if (confirmCancel) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'cancel_order.php', // PHP file to handle cancellation logic
+                    data: { orderID: orderID },
+                    success: function (response) {
+                        // Handle success response here
+                        window.alert("刪除成功");
+                        location.reload();
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error response here
+                        console.error(xhr.responseText);
+                        window.alert("刪除失敗");
+                    }
+                });
             }
         });
 
         // 修改訂單
         $('.edit').click(function () {
-            // 跳轉到訂單修改頁面
-            window.location.href = "edit.php?oid=<?php echo $row_RecOrder['orderid'];?>";
+            let orderID = $(this).data('orderid');
+            window.location.href = "edit.php?oid=" + orderID;
         });
     });
 </script>
