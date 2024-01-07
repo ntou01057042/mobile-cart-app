@@ -60,6 +60,7 @@ if (isset($_POST["username"]) && isset($_POST["passwd"])) {
         }
 
         .container {
+            margin: auto;
             background-color: #fff;
             padding: 20px;
             border-radius: 8px;
