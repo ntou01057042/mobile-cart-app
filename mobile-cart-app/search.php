@@ -1,5 +1,6 @@
 <?php
 require_once('connMysql.php');
+if($_SESSION["m_level"] == "")
     $query_RecOrder = "SELECT * FROM `order` ORDER BY `order`.`orderid` ASC";
     $stmt = $db_link->prepare($query_RecOrder);
     $stmt->execute();
