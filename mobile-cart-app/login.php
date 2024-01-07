@@ -1,11 +1,6 @@
 <?php
 require_once("connMysql.php");
 session_start();
-// if (isset($_SESSION["loginMember"]) && ($_SESSION["loginMember"] != "")) {
-//     echo "<script>";
-//     echo "window.location.href = 'index.php';";
-//     echo "</script>";
-// }
 //執行會員登入
 if (isset($_POST["username"]) && isset($_POST["passwd"])) {
     echo "<script>";
@@ -38,7 +33,7 @@ if (isset($_POST["username"]) && isset($_POST["passwd"])) {
         }
         header("Location: index.php");
     } else {
-        // TODO
+        header("Location: login.php?errMsg=1");
     }
 }
 ?>
