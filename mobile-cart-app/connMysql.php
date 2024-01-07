@@ -2,7 +2,7 @@
 	//資料庫主機設定
 	$db_host = "localhost";
 	$db_username = "root";
-	$db_password = "01057055";   //
+	$db_password = "042055104";
 	$db_name = "phpcart";
 	//連線資料庫
 	$db_link = @new mysqli($db_host, $db_username, $db_password, $db_name);
