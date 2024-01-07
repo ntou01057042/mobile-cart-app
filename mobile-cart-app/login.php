@@ -71,6 +71,7 @@ if (isset($_POST["username"]) && isset($_POST["passwd"])) {
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 300px;
             text-align: center;
+            margin-top: 100px;
         }
 
         h2 {
