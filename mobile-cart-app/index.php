@@ -34,7 +34,7 @@
             <ul>
                 <li><a href="index.php" data-icon="grid" class="ui-btn-active">逛逛商店</a></li>
                 <li><a href="cart.php" data-icon="star" data-ajax="false">檢視購物車</a></li>
-                <li><a href="search.php" data-icon="gear" data-ajax="false">訂單查詢</a></li>
+                <li><a href="search.php" data-icon="search" data-ajax="false">訂單查詢</a></li>
             </ul>
         </div>        
 	</div>
