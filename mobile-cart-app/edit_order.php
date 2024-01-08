@@ -24,4 +24,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['orderID'])) {
     // Return an error message for invalid requests
     echo "Invalid request";
 }
-?>

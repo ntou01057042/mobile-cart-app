@@ -17,4 +17,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['orderID'])) {
 } else {
     echo "Invalid request";
 }
-?>
