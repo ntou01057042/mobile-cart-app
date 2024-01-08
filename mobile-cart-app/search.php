@@ -13,12 +13,12 @@ if (isset($_GET["logout"]) && ($_GET["logout"] == "true")) {
     header("Location: index.php");
 }
 //
-if($_SESSION["memberLevel"] == "admin"){
+if ($_SESSION["memberLevel"] == "admin") {
     $query_RecOrder = "SELECT * FROM `order` ORDER BY `order`.`orderid` ASC";
     $stmt = $db_link->prepare($query_RecOrder);
     $stmt->execute();
     $RecOrder = $stmt->get_result();
-}else{
+} else {
     $query_RecOrder = "SELECT * FROM `order` WHERE m_id = '{$_SESSION["userId"]}' ORDER BY `order`.`orderid` ASC";
     $stmt = $db_link->prepare($query_RecOrder);
     $stmt->execute();
@@ -82,6 +82,7 @@ if($_SESSION["memberLevel"] == "admin"){
             .datatable-row .edit {
                 font-size: 12px;
             }
+
             .vertical-align-top {
                 vertical-align: top;
             }
@@ -93,7 +94,7 @@ if($_SESSION["memberLevel"] == "admin"){
             .vertical-align-bottom {
                 vertical-align: bottom;
             }
-            
+
             .button-container {
                 white-space: nowrap;
             }
@@ -101,14 +102,15 @@ if($_SESSION["memberLevel"] == "admin"){
             .my-button {
                 margin: 0;
                 display: inline-block;
-                padding: 5px 5px; 
-                width: 100px; 
-                height: 40px; 
-                font-size: 16px; 
+                padding: 5px 5px;
+                width: 100px;
+                height: 40px;
+                font-size: 16px;
             }
-            .op{
-                height:40px;
-                line-height:40px;
+
+            .op {
+                height: 40px;
+                line-height: 40px;
             }
         }
     </style>
@@ -121,7 +123,7 @@ if($_SESSION["memberLevel"] == "admin"){
     <main>
         <table width="100%" border="0" cellpadding="2" cellspacing="0" class="datatable">
             <?php while ($row_RecOrder = $RecOrder->fetch_assoc()) { ?>
-                <tr class="vertical-align-top" >
+                <tr class="vertical-align-top">
                     <th>編號</th>
                     <th>小計</th>
                     <th>訂購人姓名</th>
